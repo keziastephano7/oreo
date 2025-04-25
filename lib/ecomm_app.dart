@@ -13,6 +13,7 @@ class ECommerceApp extends StatelessWidget {
       title: 'ShopEasy',
       theme: ThemeData(
         primarySwatch: Colors.indigo,
+        scaffoldBackgroundColor: Colors.grey[100],
         appBarTheme: const AppBarTheme(
           elevation: 0,
           centerTitle: true,
@@ -23,6 +24,14 @@ class ECommerceApp extends StatelessWidget {
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           elevation: 4,
+          backgroundColor: Colors.indigoAccent,
+        ),
+        cardTheme: CardTheme(
+          elevation: 4,
+          margin: const EdgeInsets.all(12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
       ),
       home: const HomePage(),
@@ -123,7 +132,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: 0.7,
+          childAspectRatio: 0.75,
         ),
         itemCount: products.length,
         itemBuilder: (context, index) => ProductCard(
@@ -152,27 +161,22 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
               child: ClipRRect(
                 borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(12),
+                  top: Radius.circular(16),
                 ),
                 child: Image.network(
                   product.imageUrl,
                   fit: BoxFit.cover,
-                  width: double.infinity,
                   errorBuilder: (context, error, stackTrace) => const Center(
-                    child: Icon(Icons.image_not_supported),
+                    child: Icon(Icons.image_not_supported, size: 60),
                   ),
                 ),
               ),
@@ -277,6 +281,7 @@ class ProductDetailsPage extends StatelessWidget {
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: Theme.of(context).primaryColor,
                       ),
                     ),
                   ),
