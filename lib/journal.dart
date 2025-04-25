@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+// shared_preferences: ^2.0.0
 void main() {
   runApp(DailyJournalApp());
 }
