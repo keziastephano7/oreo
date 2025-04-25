@@ -16,8 +16,40 @@ class RecipeApp extends StatelessWidget {
       title: 'Recipe Manager',
       theme: ThemeData(
         primarySwatch: Colors.green,
+        scaffoldBackgroundColor: Colors.grey[100],
+        appBarTheme: AppBarTheme(
+          elevation: 0,
+          centerTitle: true,
+          backgroundColor: Colors.green,
+          titleTextStyle: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          elevation: 4,
+          backgroundColor: Colors.green,
+        ),
+        cardTheme: CardTheme(
+          elevation: 3,
+          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        ),
       ),
       home: RecipeHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -89,10 +121,22 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
   Widget _buildRecipeCard(int index) {
     final recipe = recipes[index];
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ListTile(
-        title: Text(recipe.title),
-        subtitle: Text(recipe.description),
+        contentPadding: EdgeInsets.all(16),
+        title: Text(
+          recipe.title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            recipe.description,
+            style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+          ),
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -114,14 +158,22 @@ class _RecipeHomePageState extends State<RecipeHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Recipe Management System'),
+        title: Text('Recipe Manager'),
       ),
       body: recipes.isEmpty
-          ? Center(child: Text('No recipes added yet.'))
+          ? Center(
+              child: Text(
+                'No recipes added yet.',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                ),
+              ),
+            )
           : ListView.builder(
-        itemCount: recipes.length,
-        itemBuilder: (context, index) => _buildRecipeCard(index),
-      ),
+              itemCount: recipes.length,
+              itemBuilder: (context, index) => _buildRecipeCard(index),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addRecipe,
         child: Icon(Icons.add),
@@ -171,28 +223,50 @@ class _RecipeFormPageState extends State<RecipeFormPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                initialValue: _title,
-                decoration: InputDecoration(labelText: 'Recipe Title'),
-                validator: (value) => value!.isEmpty ? 'Enter a title' : null,
-                onSaved: (value) => _title = value!,
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    initialValue: _title,
+                    decoration: InputDecoration(labelText: 'Recipe Title'),
+                    validator: (value) =>
+                        value!.isEmpty ? 'Enter a title' : null,
+                    onSaved: (value) => _title = value!,
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    initialValue: _description,
+                    decoration: InputDecoration(labelText: 'Description'),
+                    validator: (value) =>
+                        value!.isEmpty ? 'Enter a description' : null,
+                    onSaved: (value) => _description = value!,
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _submitForm,
+                    style: ElevatedButton.styleFrom(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      isEditing ? 'Update Recipe' : 'Add Recipe',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
               ),
-              TextFormField(
-                initialValue: _description,
-                decoration: InputDecoration(labelText: 'Description'),
-                validator: (value) => value!.isEmpty ? 'Enter a description' : null,
-                onSaved: (value) => _description = value!,
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: Text(isEditing ? 'Update' : 'Add'),
-              ),
-            ],
+            ),
           ),
         ),
       ),
